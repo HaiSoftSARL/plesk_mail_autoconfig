@@ -1,5 +1,6 @@
 #!/bin/bash
 # Deploy mail autoconfig for Plesk
+# Website: haisoft.fr
 
 autoconfigpath="/var/www/vhosts/default/htdocs/mail"
 autoconfigfile="config-v1.1.xml"
