@@ -9,9 +9,9 @@ autoconfigpathfile="${autoconfigpath}/${autoconfigfile}"
 
 # Autodiscover paths
 autodiscoverpath="/var/www/vhosts/default/htdocs/autodiscover"
-autodiscoverfile="autodiscover.xml"
-autodiscoverpathfile="${autodiscoverpath}/${autodiscoverfile}"
+autodiscoverpathfile="${autodiscoverpath}/autodiscover.xml"
 autodiscoverhtaccess="${autodiscoverpath}/.htaccess"
+autodiscoverconffile="/etc/httpd/conf.d/autodiscover.conf"
 
 ##############
 ### Script ###
@@ -57,6 +57,15 @@ if [ ! -f "${autodiscoverhtaccess}" ]; then
 	touch "${autodiscoverhtaccess}"
 fi
 
+if [ ! -f "${autodiscoverhtaccess}" ]; then
+	fn_logecho "[INFO] Creating autodiscover .htaccess file"
+	touch "${autodiscoverhtaccess}"
+fi
+
+if [ ! -f "${autodiscoverconffile}" ]; then
+	fn_logecho "[INFO] Creating autodiscover httpd configuration file"
+	touch "${autodiscoverconffile}"
+fi
 
 fn_logecho "[INFO] Writing autoconfig config file"
 
@@ -152,13 +161,13 @@ done
 
 fn_logecho "[INFO] Writing autodiscover config file"
 echo "<?php
-$raw = file_get_contents('php://input');
-$matches = array();
-preg_match('/<EMailAddress>(.*)<\/EMailAddress>/', $raw, $matches);
+\$raw = file_get_contents('php://input');
+\$matches = array();
+preg_match('/<EMailAddress>(.*)<\/EMailAddress>/', \$raw, \$matches);
 header('Content-Type: application/xml');
 ?>
-<Autodiscover xmlns="http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006">
-  <Response xmlns="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a">
+<Autodiscover xmlns=\"http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006\">
+  <Response xmlns=\"http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a\">
     <User>
       <DisplayName>HaiSoft</DisplayName>
     </User>
@@ -173,7 +182,7 @@ header('Content-Type: application/xml');
         <SPA>off</SPA>
         <SSL>on</SSL>
         <AuthRequired>on</AuthRequired>
-        <LoginName><?php echo $matches[1]; ?></LoginName>
+        <LoginName><?php echo \$matches[1]; ?></LoginName>
       </Protocol>
       <Protocol>
         <Type>SMTP</Type>
@@ -183,7 +192,7 @@ header('Content-Type: application/xml');
         <SPA>off</SPA>
         <SSL>on</SSL>
         <AuthRequired>on</AuthRequired>
-        <LoginName><?php echo $matches[1]; ?></LoginName>
+        <LoginName><?php echo \$matches[1]; ?></LoginName>
       </Protocol>
     </Account>
   </Response>
@@ -192,10 +201,21 @@ header('Content-Type: application/xml');
 fn_logecho "[INFO] Writing autodiscover htaccess"
 echo "AddHandler php-script .php .xml" > "${autodiscoverhtaccess}"
 
+fn_logecho "[INFO] Writing autodiscover httpd configuration file"
+echo "Alias /autodiscover \"/var/www/vhosts/default/htdocs/autodiscover\"" > "${autodiscoverconffile}"
+fn_logecho "[INFO] Restarting httpd"
+service httpd restart
+
 if [ -n "$(curl "http://autoconfig.${hostname}/mail/config-v1.1.xml" | grep "<socketType>SSL</socketType>")" ]; then
 	fn_logecho "[OK] http://autoconfig.${hostname}/mail/config-v1.1.xml is accessible"
 else
 	fn_logecho "[ERROR!] http://autoconfig.${hostname}/mail/config-v1.1.xml does not seem to be accessible"
+fi
+
+if [ -n "$(curl "https://${hostname}/autodiscover/autodiscover.xml" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
+	fn_logecho "[OK] https://${hostname}/autodiscover/autodiscover.xml is accessible"
+else
+	fn_logecho "[ERROR!] https://${hostname}/autodiscover/autodiscover.xml does not seem to be accessible"
 fi
 
 fn_logecho "[INFO] Done"
