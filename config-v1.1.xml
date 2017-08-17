@@ -1,0 +1,68 @@
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<clientConfig version=\"1.1\">
+  <emailProvider id=\"haisoft.net\">
+    <domain>haisoft.net</domain>
+    <displayName>HaiSoft</displayName>
+    <displayShortName>HaiSoft</displayShortName>
+    <incomingServer type=\"imap\">
+      <hostname>HOSTNAME</hostname>
+      <port>993</port>
+      <socketType>SSL</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </incomingServer>
+    <incomingServer type=\"imap\">
+      <hostname>HOSTNAME</hostname>
+      <port>143</port>
+      <socketType>STARTTLS</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </incomingServer>
+    <incomingServer type=\"pop3\">
+      <hostname>HOSTNAME</hostname>
+      <port>995</port>
+      <socketType>SSL</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </incomingServer>
+    <incomingServer type=\"pop3\">
+      <hostname></hostname>
+      <port>110</port>
+      <socketType>STARTTLS</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </incomingServer>
+    <outgoingServer type=\"smtp\">
+      <hostname>HOSTNAME</hostname>
+      <port>465</port>
+      <socketType>SSL</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </outgoingServer>
+    <outgoingServer type=\"smtp\">
+      <hostname>HOSTNAME</hostname>
+      <port>587</port>
+      <socketType>STARTTLS</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </outgoingServer>
+    <outgoingServer type=\"smtp\">
+      <hostname>HOSTNAME</hostname>
+      <port>25</port>
+      <socketType>STARTTLS</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </outgoingServer>
+    <outgoingServer type=\"smtp\">
+      <hostname>HOSTNAME</hostname>
+      <port>2525</port>
+      <socketType>STARTTLS</socketType>
+      <authentication>password-encrypted</authentication>
+      <username>%EMAILADDRESS%</username>
+    </outgoingServer>
+    <documentation url=\"http://help.haisoft.net/\">
+      <descr lang=\"fr\">Documentation</descr>
+      <descr lang=\"en\">Documentation</descr>
+    </documentation>
+  </emailProvider>
+</clientConfig>"
