@@ -10,6 +10,7 @@ autoconfigpathfile="${autoconfigpath}/${autoconfigfile}"
 # Autodiscover paths
 autodiscoverpath="/var/www/vhosts/default/htdocs/autodiscover"
 autodiscoverpathfile="${autodiscoverpath}/autodiscover.xml"
+autodiscoverpathfilealt="${autodiscoverpath}/Autodiscover.xml"
 autodiscoverhtaccess="${autodiscoverpath}/.htaccess"
 autodiscoverconffile="/etc/httpd/conf.d/autodiscover.conf"
 
@@ -28,10 +29,10 @@ if [ ! -f "ultimate-bash-api.sh" ]; then
 fi
 source ultimate-bash-api.sh
 
+fn_logecho "Mail autoconfig && autodiscover generator for Plesk"
+fn_logecho "###################################"
 
-echo "Mail autoconfig && autodiscover generator for Plesk"
-echo "###################################"
-
+# Files and directories creation
 if [ ! -d "${autoconfigpath}" ]; then
 	fn_logecho "[INFO] Creating autoconfig cofngi path"
 	mkdir -pv "${autoconfigpath}"
@@ -52,6 +53,11 @@ if [ ! -f "${autodiscoverpathfile}" ]; then
 	touch "${autodiscoverpathfile}"
 fi
 
+if [ ! -L "${autodiscoverpathfilealt}" ]; then
+	fn_logecho "[INFO] Symlinking autodiscover alternative config file"
+	ln -s "${autodiscoverpathfile}" "${autodiscoverpathfilealt}"
+fi
+
 if [ ! -f "${autodiscoverhtaccess}" ]; then
 	fn_logecho "[INFO] Creating autodiscover .htaccess file"
 	touch "${autodiscoverhtaccess}"
@@ -66,6 +72,8 @@ if [ ! -f "${autodiscoverconffile}" ]; then
 	fn_logecho "[INFO] Creating autodiscover httpd configuration file"
 	touch "${autodiscoverconffile}"
 fi
+
+# Thunderbird autoconfig
 
 fn_logecho "[INFO] Writing autoconfig config file"
 
@@ -159,6 +167,8 @@ for i in `mysql -uadmin -p\`cat /etc/psa/.psa.shadow\` psa -Ns -e "select name f
 	/usr/local/psa/bin/dns --add "$i" -cname autoconfig -canonical "${hostname}"
 done
 
+# Outlook autodiscover
+
 fn_logecho "[INFO] Writing autodiscover config file"
 echo "<?php
 \$raw = file_get_contents('php://input');
@@ -202,9 +212,13 @@ fn_logecho "[INFO] Writing autodiscover htaccess"
 echo "AddHandler php-script .php .xml" > "${autodiscoverhtaccess}"
 
 fn_logecho "[INFO] Writing autodiscover httpd configuration file"
-echo "Alias /autodiscover \"/var/www/vhosts/default/htdocs/autodiscover\"" > "${autodiscoverconffile}"
+echo "Alias /autodiscover \"/var/www/vhosts/default/htdocs/autodiscover\"
+Alias /Autodiscover \"/var/www/vhosts/default/htdocs/autodiscover\"" > "${autodiscoverconffile}"
+
 fn_logecho "[INFO] Restarting httpd"
 service httpd restart
+
+# Some testing
 
 if [ -n "$(curl "http://autoconfig.${hostname}/mail/config-v1.1.xml" | grep "<socketType>SSL</socketType>")" ]; then
 	fn_logecho "[OK] http://autoconfig.${hostname}/mail/config-v1.1.xml is accessible"
@@ -216,6 +230,12 @@ if [ -n "$(curl "https://${hostname}/autodiscover/autodiscover.xml" | grep "<Dis
 	fn_logecho "[OK] https://${hostname}/autodiscover/autodiscover.xml is accessible"
 else
 	fn_logecho "[ERROR!] https://${hostname}/autodiscover/autodiscover.xml does not seem to be accessible"
+fi
+
+if [ -n "$(curl "https://${hostname}/Autodiscover/Autodiscover.xml" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
+	fn_logecho "[OK] https://${hostname}/Autodiscover/Autodiscover.xml is accessible"
+else
+	fn_logecho "[ERROR!] https://${hostname}/Autodiscover/Autodiscover.xml does not seem to be accessible"
 fi
 
 fn_logecho "[INFO] Done"
