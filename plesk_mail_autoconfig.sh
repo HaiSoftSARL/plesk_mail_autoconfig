@@ -1,5 +1,6 @@
 #!/bin/bash
 # Deploy mail autoconfig for Plesk
+# Support for Thunderbird, Outlook & iOS
 # Website: haisoft.fr
 
 # Autoconfig paths
