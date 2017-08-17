@@ -8,11 +8,13 @@ autoconfigfile="config-v1.1.xml"
 autoconfigpathfile="${autoconfigpath}/${autoconfigfile}"
 
 # Autodiscover paths
-autodiscoverpath="/var/www/vhosts/default/htdocs/autodiscover"
+autodiscoverpath="/var/www/vhosts/default/htdocs/mail"
 autodiscoverpathfile="${autodiscoverpath}/autodiscover.xml"
 autodiscoverpathfilealt="${autodiscoverpath}/Autodiscover.xml"
 autodiscoverhtaccess="${autodiscoverpath}/.htaccess"
-autodiscoverconffile="/etc/httpd/conf.d/autodiscover.conf"
+
+# httpd config
+httpdautodiscoverconf="/etc/httpd/conf.d/autodiscover.conf"
 
 ##############
 ### Script ###
@@ -35,42 +37,50 @@ fn_logecho "###################################"
 # Files and directories creation
 if [ ! -d "${autoconfigpath}" ]; then
 	fn_logecho "[INFO] Creating autoconfig cofngi path"
-	mkdir -pv "${autoconfigpath}"
+	fn_logecho "${autoconfigpath}"
+	mkdir -p "${autoconfigpath}"
 fi
 
 if [ ! -f "${autoconfigpathfile}" ]; then
 	fn_logecho "[INFO] Creating autoconfig config file"
+	fn_logecho "${autoconfigpathfile}"
 	touch "${autoconfigpathfile}"
 fi
 
 if [ ! -d "${autodiscoverpath}" ]; then
 	fn_logecho "[INFO] Creating autodiscover config path"
-	mkdir -pv "${autodiscoverpath}"
+	fn_logecho "${autodiscoverpath}"
+	mkdir -p "${autodiscoverpath}"
 fi
 
 if [ ! -f "${autodiscoverpathfile}" ]; then
 	fn_logecho "[INFO] Creating autodiscover config file"
+	fn_logecho "${autodiscoverpathfile}"
 	touch "${autodiscoverpathfile}"
 fi
 
 if [ ! -L "${autodiscoverpathfilealt}" ]; then
 	fn_logecho "[INFO] Symlinking autodiscover alternative config file"
+	fn_logecho "${autodiscoverpathfile} -> ${autodiscoverpathfilealt}"
 	ln -s "${autodiscoverpathfile}" "${autodiscoverpathfilealt}"
 fi
 
 if [ ! -f "${autodiscoverhtaccess}" ]; then
 	fn_logecho "[INFO] Creating autodiscover .htaccess file"
+	fn_logecho "${autodiscoverhtaccess}"
 	touch "${autodiscoverhtaccess}"
 fi
 
 if [ ! -f "${autodiscoverhtaccess}" ]; then
 	fn_logecho "[INFO] Creating autodiscover .htaccess file"
+	fn_logecho "${autodiscoverhtaccess}"
 	touch "${autodiscoverhtaccess}"
 fi
 
-if [ ! -f "${autodiscoverconffile}" ]; then
+if [ ! -f "${httpdautodiscoverconf}" ]; then
 	fn_logecho "[INFO] Creating autodiscover httpd configuration file"
-	touch "${autodiscoverconffile}"
+	fn_logecho "${httpdautodiscoverconf}"
+	touch "${httpdautodiscoverconf}"
 fi
 
 # Thunderbird autoconfig
@@ -212,8 +222,9 @@ fn_logecho "[INFO] Writing autodiscover htaccess"
 echo "AddHandler php-script .php .xml" > "${autodiscoverhtaccess}"
 
 fn_logecho "[INFO] Writing autodiscover httpd configuration file"
-echo "Alias /autodiscover \"/var/www/vhosts/default/htdocs/autodiscover\"
-Alias /Autodiscover \"/var/www/vhosts/default/htdocs/autodiscover\"" > "${autodiscoverconffile}"
+echo "Alias /mail \"${autoconfigpath}\"
+Alias /autodiscover \"${autodiscoverpath}\"
+Alias /Autodiscover \"${autodiscoverpath}\"" > "${httpdautodiscoverconf}"
 
 fn_logecho "[INFO] Restarting httpd"
 service httpd restart
@@ -221,9 +232,9 @@ service httpd restart
 # Some testing
 
 if [ -n "$(curl "http://autoconfig.${hostname}/mail/config-v1.1.xml" | grep "<socketType>SSL</socketType>")" ]; then
-	fn_logecho "[OK] http://autoconfig.${hostname}/mail/config-v1.1.xml is accessible"
+	fn_logecho "[OK] http://autoconfig.${hostname}/mail/${autoconfigfile} is accessible"
 else
-	fn_logecho "[ERROR!] http://autoconfig.${hostname}/mail/config-v1.1.xml does not seem to be accessible"
+	fn_logecho "[ERROR!] http://autoconfig.${hostname}/mail/${autoconfigfile} does not seem to be accessible"
 fi
 
 if [ -n "$(curl "https://${hostname}/autodiscover/autodiscover.xml" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
