@@ -71,12 +71,6 @@ if [ ! -f "${autodiscoverhtaccess}" ]; then
 	touch "${autodiscoverhtaccess}"
 fi
 
-if [ ! -f "${autodiscoverhtaccess}" ]; then
-	fn_logecho "[INFO] Creating autodiscover .htaccess file"
-	fn_logecho "${autodiscoverhtaccess}"
-	touch "${autodiscoverhtaccess}"
-fi
-
 if [ ! -f "${httpdautodiscoverconf}" ]; then
 	fn_logecho "[INFO] Creating autodiscover httpd configuration file"
 	fn_logecho "${httpdautodiscoverconf}"
@@ -219,7 +213,11 @@ header('Content-Type: application/xml');
 </Autodiscover>" > "${autodiscoverpathfile}"
 
 fn_logecho "[INFO] Writing autodiscover htaccess"
-echo "AddHandler php-script .php .xml" > "${autodiscoverhtaccess}"
+echo "AddHandler php-script .php .xml
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !iphone.xml
+RewriteCond %{REQUEST_URI} ios
+RewriteRule .* /ios/iphone.xml [R]" > "${autodiscoverhtaccess}"
 
 fn_logecho "[INFO] Writing autodiscover httpd configuration file"
 echo "Alias /mail \"${autoconfigpath}\"
