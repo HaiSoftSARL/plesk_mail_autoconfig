@@ -8,6 +8,7 @@
 # These will be visible inside your config files
 companyname="HaiSoft"
 companyshortname="HaiSoft"
+companylowercasename="haisoft"
 companyurl="haisoft.net"
 docurl="http://help.haisoft.net/"
 hostname="$(hostname)"
@@ -141,13 +142,21 @@ sed -i -e "s/COMPANYNAME/${companyname}/g" "${autodiscoverpathfile}"
 ## iOS config
 fn_logecho "[INFO] Writing iOS config files"
 curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.xml" > "${iphonepathfile}"
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.xml" > "${iphonemobileconfpathfile}"
+
 # iOS Logo
 fn_logecho "[INFO] Downloading ${companyname} logo for iOS"
 wget -O "${iospath}/${ioslogo}" "${ioslogourl}"
 # iOS Settings
-fn_logecho "[INFO] Populating iOS config file"
+fn_logecho "[INFO] Populating iOS config files"
 sed -i -e "s/IOSLOGO/${ioslogo}/g" "${iphonepathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonepathfile}"
+
+sed -i -e "s/HOSTNAME/${hostname}/g" "${iphonemobileconfpathfile}"
+sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonemobileconfpathfile}"
+sed -i -e "s/COMPANYLOWERCASENAME/${companylowercasename}/g" "${iphonemobileconfpathfile}"
+
+
 
 ## .htaccess config
 fn_logecho "[INFO] Writing htaccess file"
