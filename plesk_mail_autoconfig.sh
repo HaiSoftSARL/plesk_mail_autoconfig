@@ -156,13 +156,12 @@ sed -i -e "s/HOSTNAME/${hostname}/g" "${iphonemobileconfpathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonemobileconfpathfile}"
 sed -i -e "s/COMPANYLOWERCASENAME/${companylowercasename}/g" "${iphonemobileconfpathfile}"
 
-
-
 ## .htaccess config
 fn_logecho "[INFO] Writing htaccess file"
 echo "AddHandler php-script .php .xml
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !iphone.xml
+RewriteCond %{REQUEST_URI} !${ioslogo}
 RewriteCond %{REQUEST_URI} ios
 RewriteRule .* /ios/iphone.xml [R]" > "${autodiscoverhtaccess}"
 
