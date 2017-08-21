@@ -119,7 +119,7 @@ sed -i -e "s/HOSTNAME/${hostname}/g" "${autoconfigpathfile}"
 sed -i -e "s/COMPANYURL/${companyurl}/g" "${autoconfigpathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${autoconfigpathfile}"
 sed -i -e "s/COMPANYSHORTNAME/${companyshortname}/g" "${autoconfigpathfile}"
-sed -i -e "s/DOCURL/${docurl}/g" "${autoconfigpathfile}"
+sed -i -e "s@DOCURL@${docurl}@g" "${autoconfigpathfile}"
 
 # DNS for autoconfig
 fn_logecho "[INFO] Correcting default DNS zone for Thunderbird autoconfig: adding cname autoconfig to ${hostname}"
@@ -200,7 +200,7 @@ else
 fi
 
 # Test Apple iOS configurator
-if [ -n "$(curl "${iosconfigurl}" | grep "<form method="post" action="iphone.xml">")" ]; then
+if [ -n "$(curl "${iosconfigurl}" | grep "<form method=\"post\" action=\"iphone.xml\">")" ]; then
 	fn_logecho "[OK] iOS ${iosconfigurl} is accessible"
 else
 	fn_logecho "[ERROR!] iOS ${iosconfigurl} does not seem to be accessible"
