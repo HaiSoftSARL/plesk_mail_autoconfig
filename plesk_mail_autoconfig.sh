@@ -1,7 +1,19 @@
 #!/bin/bash
 # Deploy mail autoconfig for Plesk
 # Support for Thunderbird, Outlook & iOS
-# Website: haisoft.fr
+# Website: haisoft.net
+
+## Settings
+# These will be visible inside your config files
+companyname="HaiSoft"
+companyshortname="HaiSoft
+companyurl="haisoft.net"
+docurl="http://help.haisoft.net/"
+hostname="$(hostname)"
+
+# Git repo
+gituser="UltimateByte"
+gitrepo="plesk_mail_autoconfig"
 
 # Autoconfig paths
 autoconfigpath="/var/www/vhosts/default/htdocs/mail"
@@ -14,6 +26,11 @@ autodiscoverpathfile="${autodiscoverpath}/autodiscover.xml"
 autodiscoverpathfilealt="${autodiscoverpath}/Autodiscover.xml"
 autodiscoverhtaccess="${autodiscoverpath}/.htaccess"
 
+# URLs used for tests
+autoconfigurl="http://autoconfig.${hostname}/mail/config-v1.1.xml"
+autodiscoverurl="https://${hostname}/autodiscover/autodiscover.xml"
+autodiscoverurlalt="https://${hostname}/Autodiscover/Autodiscover.xml"
+
 # httpd config
 httpdautodiscoverconf="/etc/httpd/conf.d/autodiscover.conf"
 
@@ -23,7 +40,6 @@ httpdautodiscoverconf="/etc/httpd/conf.d/autodiscover.conf"
 
 # Misc Vars
 selfname="Mail Autoconfig"
-hostname="$(hostname)"
 
 # Download bash API
 if [ ! -f "ultimate-bash-api.sh" ]; then
@@ -81,7 +97,14 @@ fi
 # Thunderbird autoconfig
 
 fn_logecho "[INFO] Writing autoconfig config file"
-curl "https://raw.githubusercontent.com/UltimateByte/plesk_mail_autoconfig/master/config-v1.1.xml" > "${autoconfigpathfile}"
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/master/config-v1.1.xml" > "${autoconfigpathfile}"
+
+# Replace values with settings
+sed -i -e 's/HOSTNAME/${hostname}/g' "${autoconfigpathfile}"
+sed -i -e 's/COMPANYURL/${companyurl}/g' "${autoconfigpathfile}"
+sed -i -e 's/COMPANYNAME/${companyname}/g' "${autoconfigpathfile}"
+sed -i -e 's/COMPANYSHORTNAME/${companyshortname}/g' "${autoconfigpathfile}"
+sed -i -e 's/DOCURL/${docurl}/g' "${autoconfigpathfile}"
 
 fn_logecho "[INFO] Correcting default DNS zone for autoconfig"
 /usr/local/psa/bin/server_dns --add -cname autoconfig -canonical "${hostname}"
@@ -95,7 +118,11 @@ done
 # Outlook autodiscover
 
 fn_logecho "[INFO] Writing autodiscover config file"
-curl "https://raw.githubusercontent.com/UltimateByte/plesk_mail_autoconfig/master/autodiscover.xml" > "${autodiscoverpathfile}"
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/master/autodiscover.xml" > "${autodiscoverpathfile}"
+
+# Replace values with settings
+sed -i -e 's/HOSTNAME/${hostname}/g' "${autodiscoverpathfile}"
+sed -i -e 's/COMPANYNAME/${companyname}/g' "${autodiscoverpathfile}"
 
 fn_logecho "[INFO] Writing autodiscover htaccess"
 echo "AddHandler php-script .php .xml
@@ -114,22 +141,22 @@ service httpd restart
 
 # Some testing
 
-if [ -n "$(curl "http://autoconfig.${hostname}/mail/config-v1.1.xml" | grep "<socketType>SSL</socketType>")" ]; then
-	fn_logecho "[OK] http://autoconfig.${hostname}/mail/${autoconfigfile} is accessible"
+if [ -n "$(curl "${autoconfigurl}" | grep "<socketType>SSL</socketType>")" ]; then
+	fn_logecho "[OK] ${autoconfigurl} is accessible"
 else
-	fn_logecho "[ERROR!] http://autoconfig.${hostname}/mail/${autoconfigfile} does not seem to be accessible"
+	fn_logecho "[ERROR!] ${autoconfigurl} does not seem to be accessible"
 fi
 
-if [ -n "$(curl "https://${hostname}/autodiscover/autodiscover.xml" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
-	fn_logecho "[OK] https://${hostname}/autodiscover/autodiscover.xml is accessible"
+if [ -n "$(curl "${autodiscoverurl}" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
+	fn_logecho "[OK] ${autodiscoverurl} is accessible"
 else
-	fn_logecho "[ERROR!] https://${hostname}/autodiscover/autodiscover.xml does not seem to be accessible"
+	fn_logecho "[ERROR!] ${autodiscoverurl} does not seem to be accessible"
 fi
 
-if [ -n "$(curl "https://${hostname}/Autodiscover/Autodiscover.xml" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
-	fn_logecho "[OK] https://${hostname}/Autodiscover/Autodiscover.xml is accessible"
+if [ -n "$(curl "${autodiscoverurlalt}" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
+	fn_logecho "[OK] ${autodiscoverurlalt} is accessible"
 else
-	fn_logecho "[ERROR!] https://${hostname}/Autodiscover/Autodiscover.xml does not seem to be accessible"
+	fn_logecho "[ERROR!] ${autodiscoverurlalt} does not seem to be accessible"
 fi
 
 fn_logecho "[INFO] Done"
