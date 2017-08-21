@@ -1,35 +1,49 @@
 #!/bin/bash
 # Deploy mail autoconfig for Plesk
-# Support for Thunderbird, Outlook & iOS
+# Support for Thunderbird autoconfig, Outlook autodiscover & iOS config generator
 # Website: haisoft.net
 
 ## Settings
+
 # These will be visible inside your config files
 companyname="HaiSoft"
-companyshortname="HaiSoft
+companyshortname="HaiSoft"
 companyurl="haisoft.net"
 docurl="http://help.haisoft.net/"
 hostname="$(hostname)"
 
-# Git repo
+# Git repo, useful if you want to fork it
 gituser="UltimateByte"
 gitrepo="plesk_mail_autoconfig"
+gitbranch="master"
 
-# Autoconfig paths
-autoconfigpath="/var/www/vhosts/default/htdocs/mail"
+# Hosting directory
+# The place where we host our configuration files
+defaulthostingdir="/var/www/vhosts/default/htdocs"
+
+# Thunderbird autoconfig paths
+autoconfigpath="${defaulthostingdir}/mail"
 autoconfigfile="config-v1.1.xml"
 autoconfigpathfile="${autoconfigpath}/${autoconfigfile}"
 
-# Autodiscover paths
-autodiscoverpath="/var/www/vhosts/default/htdocs/mail"
+# Outlook autodiscover paths
+autodiscoverpath="${defaulthostingdir}/mail"
 autodiscoverpathfile="${autodiscoverpath}/autodiscover.xml"
 autodiscoverpathfilealt="${autodiscoverpath}/Autodiscover.xml"
 autodiscoverhtaccess="${autodiscoverpath}/.htaccess"
+
+# iOS configurator paths
+iospath="${defaulthostingdir}/mail"
+iphonepathfile="${iospath}/iphone.xml"
+iphonemobileconfpathfile="${autodiscoverpath}/iphone.mobileconfig"
+ioslogo="logo.png"
+ioslogourl="https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/${ioslogo}"
 
 # URLs used for tests
 autoconfigurl="http://autoconfig.${hostname}/mail/config-v1.1.xml"
 autodiscoverurl="https://${hostname}/autodiscover/autodiscover.xml"
 autodiscoverurlalt="https://${hostname}/Autodiscover/Autodiscover.xml"
+iosconfigurl="http://${hostname}/ios"
 
 # httpd config
 httpdautodiscoverconf="/etc/httpd/conf.d/autodiscover.conf"
@@ -53,7 +67,7 @@ fn_logecho "###################################"
 
 # Files and directories creation
 if [ ! -d "${autoconfigpath}" ]; then
-	fn_logecho "[INFO] Creating autoconfig cofngi path"
+	fn_logecho "[INFO] Creating autoconfig config path"
 	fn_logecho "${autoconfigpath}"
 	mkdir -p "${autoconfigpath}"
 fi
@@ -94,69 +108,93 @@ if [ ! -f "${httpdautodiscoverconf}" ]; then
 	touch "${httpdautodiscoverconf}"
 fi
 
-# Thunderbird autoconfig
-
-fn_logecho "[INFO] Writing autoconfig config file"
-curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/master/config-v1.1.xml" > "${autoconfigpathfile}"
+## Thunderbird autoconfig
+fn_logecho "[INFO] Writing Thunderbird autoconfig config file"
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/config-v1.1.xml" > "${autoconfigpathfile}"
 
 # Replace values with settings
-sed -i -e 's/HOSTNAME/${hostname}/g' "${autoconfigpathfile}"
-sed -i -e 's/COMPANYURL/${companyurl}/g' "${autoconfigpathfile}"
-sed -i -e 's/COMPANYNAME/${companyname}/g' "${autoconfigpathfile}"
-sed -i -e 's/COMPANYSHORTNAME/${companyshortname}/g' "${autoconfigpathfile}"
-sed -i -e 's/DOCURL/${docurl}/g' "${autoconfigpathfile}"
+fn_logecho "[INFO] Populating Thunderbird autoconfig file"
+sed -i -e "s/HOSTNAME/${hostname}/g" "${autoconfigpathfile}"
+sed -i -e "s/COMPANYURL/${companyurl}/g" "${autoconfigpathfile}"
+sed -i -e "s/COMPANYNAME/${companyname}/g" "${autoconfigpathfile}"
+sed -i -e "s/COMPANYSHORTNAME/${companyshortname}/g" "${autoconfigpathfile}"
+sed -i -e "s/DOCURL/${docurl}/g" "${autoconfigpathfile}"
 
-fn_logecho "[INFO] Correcting default DNS zone for autoconfig"
+# DNS for autoconfig
+fn_logecho "[INFO] Correcting default DNS zone for Thunderbird autoconfig: adding cname autoconfig to ${hostname}"
 /usr/local/psa/bin/server_dns --add -cname autoconfig -canonical "${hostname}"
 
-fn_logecho "[INFO] Adding DNS entry for every website for autoconfig"
-
+fn_logecho "[INFO] Adding DNS entry for every website for Thunderbird autoconfig: adding cname autoconfig to ${hostname}"
 for i in `mysql -uadmin -p\`cat /etc/psa/.psa.shadow\` psa -Ns -e "select name from domains"`; do 
 	/usr/local/psa/bin/dns --add "$i" -cname autoconfig -canonical "${hostname}"
 done
 
-# Outlook autodiscover
+## Outlook autodiscover
+fn_logecho "[INFO] Writing Outlook autodiscover file"
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/autodiscover.xml" > "${autodiscoverpathfile}"
 
-fn_logecho "[INFO] Writing autodiscover config file"
-curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/master/autodiscover.xml" > "${autodiscoverpathfile}"
+# Outlook settings
+fn_logecho "[INFO] Populating Outlook autodiscover file"
+sed -i -e "s/HOSTNAME/${hostname}/g" "${autodiscoverpathfile}"
+sed -i -e "s/COMPANYNAME/${companyname}/g" "${autodiscoverpathfile}"
 
-# Replace values with settings
-sed -i -e 's/HOSTNAME/${hostname}/g' "${autodiscoverpathfile}"
-sed -i -e 's/COMPANYNAME/${companyname}/g' "${autodiscoverpathfile}"
+## iOS config
+fn_logecho "[INFO] Writing iOS config files"
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.xml" > "${iphonepathfile}"
+# iOS Logo
+fn_logecho "[INFO] Downloading ${companyname} logo for iOS"
+wget -O "${iospath}/${ioslogo}" "${ioslogourl}"
+# iOS Settings
+fn_logecho "[INFO] Populating iOS config file"
+sed -i -e "s/IOSLOGO/${ioslogo}/g" "${iphonepathfile}"
+sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonepathfile}"
 
-fn_logecho "[INFO] Writing autodiscover htaccess"
+## .htaccess config
+fn_logecho "[INFO] Writing htaccess file"
 echo "AddHandler php-script .php .xml
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !iphone.xml
 RewriteCond %{REQUEST_URI} ios
 RewriteRule .* /ios/iphone.xml [R]" > "${autodiscoverhtaccess}"
 
+## HTTPD aliases config
 fn_logecho "[INFO] Writing autodiscover httpd configuration file"
 echo "Alias /mail \"${autoconfigpath}\"
 Alias /autodiscover \"${autodiscoverpath}\"
-Alias /Autodiscover \"${autodiscoverpath}\"" > "${httpdautodiscoverconf}"
+Alias /Autodiscover \"${autodiscoverpath}\"
+Alias /ios \"${iospath}\"" > "${httpdautodiscoverconf}"
 
 fn_logecho "[INFO] Restarting httpd"
 service httpd restart
 
-# Some testing
+## Testing
 
+# Test Thunderbird autoconfig
 if [ -n "$(curl "${autoconfigurl}" | grep "<socketType>SSL</socketType>")" ]; then
-	fn_logecho "[OK] ${autoconfigurl} is accessible"
+	fn_logecho "[OK] Thunderbird ${autoconfigurl} is accessible"
 else
-	fn_logecho "[ERROR!] ${autoconfigurl} does not seem to be accessible"
+	fn_logecho "[ERROR!] Thunderbird ${autoconfigurl} does not seem to be accessible"
 fi
 
+# Test Outlook autodiscover
 if [ -n "$(curl "${autodiscoverurl}" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
-	fn_logecho "[OK] ${autodiscoverurl} is accessible"
+	fn_logecho "[OK] Outlook ${autodiscoverurl} is accessible"
 else
-	fn_logecho "[ERROR!] ${autodiscoverurl} does not seem to be accessible"
+	fn_logecho "[ERROR!] Outlook ${autodiscoverurl} does not seem to be accessible"
 fi
 
+# Test Outlook Autodiscover
 if [ -n "$(curl "${autodiscoverurlalt}" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
-	fn_logecho "[OK] ${autodiscoverurlalt} is accessible"
+	fn_logecho "[OK] Outlook ${autodiscoverurlalt} is accessible"
 else
-	fn_logecho "[ERROR!] ${autodiscoverurlalt} does not seem to be accessible"
+	fn_logecho "[ERROR!] Outlook ${autodiscoverurlalt} does not seem to be accessible"
+fi
+
+# Test Apple iOS configurator
+if [ -n "$(curl "${iosconfigurl}" | grep "<form method="post" action="iphone.xml">")" ]; then
+	fn_logecho "[OK] iOS ${iosconfigurl} is accessible"
+else
+	fn_logecho "[ERROR!] iOS ${iosconfigurl} does not seem to be accessible"
 fi
 
 fn_logecho "[INFO] Done"
