@@ -186,14 +186,14 @@ else
 fi
 
 # Test Outlook autodiscover
-if [ -n "$(curl "${autodiscoverurl}" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
+if [ -n "$(curl "${autodiscoverurl}" | grep "<DisplayName>${companyname}</DisplayName>")" ]; then
 	fn_logecho "[OK] Outlook ${autodiscoverurl} is accessible"
 else
 	fn_logecho "[ERROR!] Outlook ${autodiscoverurl} does not seem to be accessible"
 fi
 
 # Test Outlook Autodiscover
-if [ -n "$(curl "${autodiscoverurlalt}" | grep "<DisplayName>HaiSoft</DisplayName>")" ]; then
+if [ -n "$(curl "${autodiscoverurlalt}" | grep "<DisplayName>${companyname}</DisplayName>")" ]; then
 	fn_logecho "[OK] Outlook ${autodiscoverurlalt} is accessible"
 else
 	fn_logecho "[ERROR!] Outlook ${autodiscoverurlalt} does not seem to be accessible"
