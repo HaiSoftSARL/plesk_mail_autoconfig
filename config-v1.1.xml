@@ -1,4 +1,4 @@
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<?php header('Content-Type: application/xml'); ?>
 <clientConfig version=\"1.1\">
   <emailProvider id=\"COMPANYURL\">
     <domain>COMPANYURL</domain>
