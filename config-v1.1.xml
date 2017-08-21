@@ -1,9 +1,9 @@
 <?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <clientConfig version=\"1.1\">
-  <emailProvider id=\"haisoft.net\">
-    <domain>haisoft.net</domain>
-    <displayName>HaiSoft</displayName>
-    <displayShortName>HaiSoft</displayShortName>
+  <emailProvider id=\"COMPANYURL\">
+    <domain>COMPANYURL</domain>
+    <displayName>COMPANYNAME</displayName>
+    <displayShortName>COMPANYSHORTNAME</displayShortName>
     <incomingServer type=\"imap\">
       <hostname>HOSTNAME</hostname>
       <port>993</port>
@@ -60,7 +60,7 @@
       <authentication>password-encrypted</authentication>
       <username>%EMAILADDRESS%</username>
     </outgoingServer>
-    <documentation url=\"http://help.haisoft.net/\">
+    <documentation url=\"DOCURL\">
       <descr lang=\"fr\">Documentation</descr>
       <descr lang=\"en\">Documentation</descr>
     </documentation>
