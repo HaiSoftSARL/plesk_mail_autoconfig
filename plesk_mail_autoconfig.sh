@@ -142,7 +142,7 @@ sed -i -e "s/COMPANYNAME/${companyname}/g" "${autodiscoverpathfile}"
 ## iOS config
 fn_logecho "[INFO] Writing iOS config files"
 curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.xml" > "${iphonepathfile}"
-curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.xml" > "${iphonemobileconfpathfile}"
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.mobileconfig" > "${iphonemobileconfpathfile}"
 
 # iOS Logo
 fn_logecho "[INFO] Downloading ${companyname} logo for iOS"
