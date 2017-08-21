@@ -1,0 +1,35 @@
+<?php if ($_REQUEST['email'] != "" && $_REQUEST['nom'] != "" && filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL)): ?>
+  <?php
+  header('Content-Type: text/plain');
+  header("Content-Disposition: attachment; filename=\"".$_REQUEST['email'].".mobileconfig\"");
+  $conf = file_get_contents('iphone.mobileconfig');
+  $conf = str_replace('MAILADDR', $_REQUEST['email'], $conf);
+  $conf = str_replace('NAME', $_REQUEST['nom'], $conf);
+  print $conf;
+  ?>
+<?php else: ?>
+  <html>
+  <head>
+    <title>Auto-configuration mail pour iPhone</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1; user-scalable=no" />
+  </head>
+  <body style="font: 100% Verdana;">
+    <form method="post" action="iphone.xml">
+      <p style="text-align: center">
+        <img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
+        <br/><br/>
+        Entrez vos nom et pr&eacute;nom (qui s'afficheront en tant qu'exp&eacute;diteur des e-mails)<br/>
+        et votre adresse email compl&egrave;te, afin d'obtenir un fichier de configuration
+        pour votre appareil iOS (iPhone/iPad...)<br/>
+        <br/><br/>
+        Pr&eacute;nom et nom (requis) : <input type="text" name="nom" style="height: 30px; width: 250px;"/><br/>
+        <br/><br/>
+        Adresse email (requis) : <input type="text" name="email" style="height: 30px; width: 250px;"/><br/>
+        <br/><br/>
+        <input type="submit" value="T&eacute;l&eacute;charger"/><br/><br/>
+        Veillez &agrave; remplir tout les champs, et &agrave; entrer une adresse email valide, sinon le t&eacute;l&eacute;chargement ne se lancera pas !
+      </p>
+    </form>
+  </body>
+</html>
+<?php endif ?>
