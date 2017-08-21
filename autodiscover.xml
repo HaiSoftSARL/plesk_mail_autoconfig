@@ -1,11 +1,11 @@
 <?php
 $raw = file_get_contents('php://input');
 $matches = array();
-preg_match('/<EMailAddress>(.*)<\/EMailAddress>/', $raw, \$matches);
+preg_match('/<EMailAddress>(.*)<\/EMailAddress>/', $raw, $matches);
 header('Content-Type: application/xml');
 ?>
-<Autodiscover xmlns=\"http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006\">
-  <Response xmlns=\"http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a\">
+<Autodiscover xmlns="http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006">
+  <Response xmlns="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a">
     <User>
       <DisplayName>COMPANYNAME</DisplayName>
     </User>
