@@ -63,30 +63,37 @@ if [ ! -f "ultimate-bash-api.sh" ]; then
 fi
 source ultimate-bash-api.sh
 
-fn_logecho "Mail autoconfig && autodiscover generator for Plesk"
-fn_logecho "###################################"
+fn_logecho "#############################"
+fn_logecho "### Plesk Mail Autoconfig ###"
+fn_logecho "#############################"
+echo ""
+sleep 1.5
+
+fn_logecho "[ INFO ] Creating autoconfig config path if needed"
+echo ""
+sleep 1
 
 # Files and directories creation
 if [ ! -d "${autoconfigpath}" ]; then
-	fn_logecho "[INFO] Creating autoconfig config path"
+	fn_logecho "[ ... ] Creating autoconfig config path"
 	fn_logecho "${autoconfigpath}"
 	mkdir -p "${autoconfigpath}"
 fi
 
 if [ ! -f "${autoconfigpathfile}" ]; then
-	fn_logecho "[INFO] Creating autoconfig config file"
+	fn_logecho "[ ... ] Creating autoconfig config file"
 	fn_logecho "${autoconfigpathfile}"
 	touch "${autoconfigpathfile}"
 fi
 
 if [ ! -d "${autodiscoverpath}" ]; then
-	fn_logecho "[INFO] Creating autodiscover config path"
+	fn_logecho "[ ... ] Creating autodiscover config path"
 	fn_logecho "${autodiscoverpath}"
 	mkdir -p "${autodiscoverpath}"
 fi
 
 if [ ! -f "${autodiscoverpathfile}" ]; then
-	fn_logecho "[INFO] Creating autodiscover config file"
+	fn_logecho "[ ... ] Creating autodiscover config file"
 	fn_logecho "${autodiscoverpathfile}"
 	touch "${autodiscoverpathfile}"
 fi
@@ -95,6 +102,24 @@ if [ ! -L "${autodiscoverpathfilealt}" ]; then
 	fn_logecho "[INFO] Symlinking autodiscover alternative config file"
 	fn_logecho "${autodiscoverpathfile} -> ${autodiscoverpathfilealt}"
 	ln -s "${autodiscoverpathfile}" "${autodiscoverpathfilealt}"
+fi
+
+if [ ! -d "${iospath}" ]; then
+	fn_logecho "[ ... ] Creating iOS mail configurator directory"
+	fn_logecho "${iospath}"
+	mkdir -p "${iospath}"
+fi
+
+if [ ! -f "${iphonepathfile}" ]; then
+	fn_logecho "[ ... ] Creating iOS config file"
+	fn_logecho "${iphonepathfile}"
+	touch "${iphonepathfile}"
+fi
+
+if [ ! -f "${iphonemobileconfpathfile}" ]; then
+	fn_logecho "[INFO] Creating iOS mobile config file"
+	fn_logecho "${iphonemobileconfpathfile}"
+	touch "${iphonemobileconfpathfile}"
 fi
 
 if [ ! -f "${autodiscoverhtaccess}" ]; then
@@ -110,11 +135,15 @@ if [ ! -f "${httpdautodiscoverconf}" ]; then
 fi
 
 ## Thunderbird autoconfig
-fn_logecho "[INFO] Writing Thunderbird autoconfig config file"
+echo ""
+fn_logecho "[ INFO ] Writing Thunderbird autoconfig config file"
+sleep 1
+echo ""
 curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/config-v1.1.xml" > "${autoconfigpathfile}"
 
 # Replace values with settings
-fn_logecho "[INFO] Populating Thunderbird autoconfig file"
+fn_logecho "[ ... ] Populating Thunderbird autoconfig file"
+sleep 0.5
 sed -i -e "s/HOSTNAME/${hostname}/g" "${autoconfigpathfile}"
 sed -i -e "s/COMPANYURL/${companyurl}/g" "${autoconfigpathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${autoconfigpathfile}"
@@ -122,33 +151,46 @@ sed -i -e "s/COMPANYSHORTNAME/${companyshortname}/g" "${autoconfigpathfile}"
 sed -i -e "s@DOCURL@${docurl}@g" "${autoconfigpathfile}"
 
 # DNS for autoconfig
-fn_logecho "[INFO] Correcting default DNS zone for Thunderbird autoconfig: adding cname autoconfig to ${hostname}"
+fn_logecho "[ INFO ] Correcting default DNS zone for Thunderbird autoconfig: adding cname autoconfig to ${hostname}"
+echo ""
+sleep 1
 /usr/local/psa/bin/server_dns --add -cname autoconfig -canonical "${hostname}"
 
-fn_logecho "[INFO] Adding DNS entry for every website for Thunderbird autoconfig: adding cname autoconfig to ${hostname}"
+fn_logecho "[ ... ] Adding DNS entry for every website for Thunderbird autoconfig"
+echo ""
+sleep 1
 for i in `mysql -uadmin -p\`cat /etc/psa/.psa.shadow\` psa -Ns -e "select name from domains"`; do 
 	/usr/local/psa/bin/dns --add "$i" -cname autoconfig -canonical "${hostname}"
+	fn_logecho "Adding cname: autoconfig.$i - ${hostname}"
 done
 
 ## Outlook autodiscover
-fn_logecho "[INFO] Writing Outlook autodiscover file"
+echo ""
+fn_logecho "[ INFO ] Writing Outlook autodiscover file"
+sleep 1
 curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/autodiscover.xml" > "${autodiscoverpathfile}"
 
 # Outlook settings
-fn_logecho "[INFO] Populating Outlook autodiscover file"
+fn_logecho "[ ... ] Populating Outlook autodiscover file"
+sleep 0.5
 sed -i -e "s/HOSTNAME/${hostname}/g" "${autodiscoverpathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${autodiscoverpathfile}"
 
 ## iOS config
-fn_logecho "[INFO] Writing iOS config files"
+echo ""
+fn_logecho "[ INFO ] Writing iOS config files"
+echo ""
+sleep 0.5
 curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.xml" > "${iphonepathfile}"
 curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.mobileconfig" > "${iphonemobileconfpathfile}"
 
 # iOS Logo
-fn_logecho "[INFO] Downloading ${companyname} logo for iOS"
+fn_logecho "[ ... ] Downloading ${ioslogo} logo for iOS"
+sleep 0.5
 wget -O "${iospath}/${ioslogo}" "${ioslogourl}"
 # iOS Settings
-fn_logecho "[INFO] Populating iOS config files"
+fn_logecho "[ ... ] Populating iOS config files"
+sleep 0.5
 sed -i -e "s/IOSLOGO/${ioslogo}/g" "${iphonepathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonepathfile}"
 
@@ -157,7 +199,9 @@ sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonemobileconfpathfile}"
 sed -i -e "s/COMPANYLOWERCASENAME/${companylowercasename}/g" "${iphonemobileconfpathfile}"
 
 ## .htaccess config
-fn_logecho "[INFO] Writing htaccess file"
+echo ""
+fn_logecho "[ INFO ] Writing htaccess file"
+sleep 0.5
 echo "AddHandler php-script .php .xml
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !iphone.xml
@@ -166,43 +210,55 @@ RewriteCond %{REQUEST_URI} ios
 RewriteRule .* /ios/iphone.xml [R]" > "${autodiscoverhtaccess}"
 
 ## HTTPD aliases config
-fn_logecho "[INFO] Writing autodiscover httpd configuration file"
+echo ""
+fn_logecho "[ INFO ] Writing autodiscover httpd configuration file"
+sleep 0.5
 echo "Alias /mail \"${autoconfigpath}\"
 Alias /autodiscover \"${autodiscoverpath}\"
 Alias /Autodiscover \"${autodiscoverpath}\"
 Alias /ios \"${iospath}\"" > "${httpdautodiscoverconf}"
 
-fn_logecho "[INFO] Restarting httpd"
+echo ""
+fn_logecho "[ INFO ] Restarting httpd"
 service httpd restart
 
 ## Testing
 
+fn_logecho "#############"
+fn_logecho "## Testing ##"
+fn_logecho "#############"
+echo ""
+sleep 1
+
 # Test Thunderbird autoconfig
 if [ -n "$(curl "${autoconfigurl}" | grep "<socketType>SSL</socketType>")" ]; then
-	fn_logecho "[OK] Thunderbird ${autoconfigurl} is accessible"
+	fn_logecho "[ OK ] Thunderbird ${autoconfigurl} is accessible"
 else
-	fn_logecho "[ERROR!] Thunderbird ${autoconfigurl} does not seem to be accessible"
+	fn_logecho "[ Warning ] Thunderbird ${autoconfigurl} does not seem to be accessible"
 fi
-
+echo ""
+sleep 0.5
 # Test Outlook autodiscover
 if [ -n "$(curl "${autodiscoverurl}" | grep "<DisplayName>${companyname}</DisplayName>")" ]; then
-	fn_logecho "[OK] Outlook ${autodiscoverurl} is accessible"
+	fn_logecho "[ OK ] Outlook ${autodiscoverurl} is accessible"
 else
-	fn_logecho "[ERROR!] Outlook ${autodiscoverurl} does not seem to be accessible"
+	fn_logecho "[ Warning ] Outlook ${autodiscoverurl} does not seem to be accessible"
 fi
-
+echo ""
+sleep 0.5
 # Test Outlook Autodiscover
 if [ -n "$(curl "${autodiscoverurlalt}" | grep "<DisplayName>${companyname}</DisplayName>")" ]; then
-	fn_logecho "[OK] Outlook ${autodiscoverurlalt} is accessible"
+	fn_logecho "[ OK ] Outlook ${autodiscoverurlalt} is accessible"
 else
-	fn_logecho "[ERROR!] Outlook ${autodiscoverurlalt} does not seem to be accessible"
+	fn_logecho "[ Warning ] Outlook ${autodiscoverurlalt} does not seem to be accessible"
 fi
-
+echo ""
+sleep 0.5
 # Test Apple iOS configurator
 if [ -n "$(curl -L "${iosconfigurl}" | grep "<form method=\"post\" action=\"iphone.xml\">")" ]; then
-	fn_logecho "[OK] iOS ${iosconfigurl} is accessible"
+	fn_logecho "[ OK ] iOS ${iosconfigurl} is accessible"
 else
-	fn_logecho "[ERROR!] iOS ${iosconfigurl} does not seem to be accessible"
+	fn_logecho "[ Warning ] iOS ${iosconfigurl} does not seem to be accessible"
 fi
 
-fn_logecho "[INFO] Done"
+fn_logecho "[ OK ] Done"
