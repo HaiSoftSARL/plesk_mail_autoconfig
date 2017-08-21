@@ -199,7 +199,7 @@ else
 fi
 
 # Test Apple iOS configurator
-if [ -n "$(curl "${iosconfigurl}" | grep "<form method=\"post\" action=\"iphone.xml\">")" ]; then
+if [ -n "$(curl -L "${iosconfigurl}" | grep "<form method=\"post\" action=\"iphone.xml\">")" ]; then
 	fn_logecho "[OK] iOS ${iosconfigurl} is accessible"
 else
 	fn_logecho "[ERROR!] iOS ${iosconfigurl} does not seem to be accessible"
