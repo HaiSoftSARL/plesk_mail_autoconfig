@@ -7,7 +7,7 @@ header('Content-Type: application/xml');
 <Autodiscover xmlns=\"http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006\">
   <Response xmlns=\"http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a\">
     <User>
-      <DisplayName>HaiSoft</DisplayName>
+      <DisplayName>COMPANYNAME</DisplayName>
     </User>
     <Account>
       <AccountType>email</AccountType>
