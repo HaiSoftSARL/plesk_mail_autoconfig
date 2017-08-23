@@ -14,7 +14,7 @@
 			<Action>settings</Action>
 			<Protocol>
 				<Type>IMAP</Type>
-        		<Server>HOSTNAME</Server>
+        			<Server>HOSTNAME</Server>
 				<Port>993</Port>
 				<DomainRequired>off</DomainRequired>
 				<SPA>off</SPA>
