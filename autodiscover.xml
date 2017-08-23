@@ -23,6 +23,15 @@ header('Content-Type: application/xml');
         <LoginName><?php echo $matches[1]; ?></LoginName>
       </Protocol>
       <Protocol>
+        <Type>POP3</Type>
+        <Server>HOSTNAME</Server>
+        <Port>995</Port>
+        <DomainRequired>off</DomainRequired>
+        <SPA>off</SPA>
+        <SSL>on</SSL>
+        <AuthRequired>on</AuthRequired>
+      </Protocol>
+      <Protocol>
         <Type>SMTP</Type>
         <Server>HOSTNAME</Server>
         <Port>465</Port>
