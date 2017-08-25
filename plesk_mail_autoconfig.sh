@@ -213,8 +213,7 @@ RewriteRule .* /ios/iphone.xml [R]" > "${autodiscoverhtaccess}"
 echo ""
 fn_logecho "[ INFO ] Writing autodiscover httpd configuration file"
 sleep 0.5
-echo "Alias /mail \"${autoconfigpath}\"
-Alias /autodiscover \"${autodiscoverpath}\"
+echo "Alias /autodiscover \"${autodiscoverpath}\"
 Alias /Autodiscover \"${autodiscoverpath}\"
 Alias /ios \"${iospath}\"" > "${httpdautodiscoverconf}"
 
