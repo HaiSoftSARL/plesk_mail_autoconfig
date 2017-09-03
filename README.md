@@ -31,6 +31,7 @@ nano plesk_mail_autoconfig.sh
 - This script assumes that your machine hostname is the one to connect to for mail, and that it has SSL/TLS certificates (best practice).
 - Your DNS zones shall preferably be managed into Plesk, otherwise, for Thunderbird autoconfig to work, you just need to add the following CNAME to your domain names' DNS zones: autoconfig > [hostname].tld.
 - HTTPS access is required for Outlook (with a signed certificate for each domain).
+- Certificates must be installed for your hostname and used for the mail server, in order for SSL/TLS secured mail connections to succeed.
 
 ## What this script does
 - Creates a "mail/" directory into your default Plesk hosting page.
