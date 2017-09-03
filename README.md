@@ -2,6 +2,8 @@
 
 Deploys Plesk autoconfig functionnality
 
+Note: This relies on the default Plesk directory and is of course Linux only.
+
 ## Support for
 - Thunderbird autoconfig
 - Outlook autodiscover
