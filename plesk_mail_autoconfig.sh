@@ -76,7 +76,7 @@ elif [ -d "/etc/httpd/conf.d/" ]&&[ ! -d "/etc/apache2/conf-enabled" ]; then
 	fn_logecho "[ INFO ] Detected httpd, hello RedHat based system"
 	apacheautodiscoverconf="/etc/httpd/conf.d/autodiscover.conf"
 	apacheservicename="httpd"
-elif [ -d "/etc/httpd/conf.d" ]&&[ ! -d "/etc/apache2/conf-enabled" ]; then
+elif [ ! -d "/etc/httpd/conf.d" ]&&[ -d "/etc/apache2/conf-enabled" ]; then
 	fn_logecho "[ INFO ] Detected apache2, hello Debian based system"
 	apacheautodiscoverconf="/etc/apache2/conf-enabled/autodiscover.conf"
 	apacheservicename="apache2"
