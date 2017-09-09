@@ -46,9 +46,6 @@ autodiscoverurl="https://${hostname}/autodiscover/autodiscover.xml"
 autodiscoverurlalt="https://${hostname}/Autodiscover/Autodiscover.xml"
 iosconfigurl="http://${hostname}/ios"
 
-# httpd config
-httpdautodiscoverconf="/etc/httpd/conf.d/autodiscover.conf"
-
 ##############
 ### Script ###
 ##############
@@ -68,6 +65,25 @@ fn_logecho "### Plesk Mail Autoconfig ###"
 fn_logecho "#############################"
 echo ""
 sleep 1.5
+
+# Detect if apache is named apache2 or httpd
+fn_logecho "[ INFO ] Detecting if Apache is named apache2 or httpd"
+sleep 1
+if [ -d "/etc/httpd/conf.d" ]&&[ -d "/etc/apache2/conf-enabled" ]; then	
+	fn_logecho "[ ERROR ] Both httpd and apache2 dirs were found in /etc"
+	exit 1
+elif [ -d "/etc/httpd/conf.d/" ]&&[ ! -d "/etc/apache2/conf-enabled" ]; then
+	fn_logecho "[ INFO ] Detected httpd, hello RedHat based system"
+	apacheautodiscoverconf="/etc/httpd/conf.d/autodiscover.conf"
+	apacheservicename="httpd"
+elif [ -d "/etc/httpd/conf.d" ]&&[ ! -d "/etc/apache2/conf-enabled" ]; then
+	fn_logecho "[ INFO ] Detected apache2, hello Debian based system"
+	apacheautodiscoverconf="/etc/apache2/conf-enabled/autodiscover.conf"
+	apacheservicename="apache2"
+else
+	fn_logecho "[ ERROR ] No apache conf.d in /etc/httpd or conf-enabled in /etc/apache2 were found"
+	exit 1
+fi
 
 fn_logecho "[ INFO ] Creating autoconfig config path if needed"
 echo ""
@@ -128,10 +144,10 @@ if [ ! -f "${autodiscoverhtaccess}" ]; then
 	touch "${autodiscoverhtaccess}"
 fi
 
-if [ ! -f "${httpdautodiscoverconf}" ]; then
-	fn_logecho "[INFO] Creating autodiscover httpd configuration file"
-	fn_logecho "${httpdautodiscoverconf}"
-	touch "${httpdautodiscoverconf}"
+if [ ! -f "${apacheautodiscoverconf}" ]; then
+	fn_logecho "[INFO] Creating autodiscover Apache configuration file"
+	fn_logecho "${apacheautodiscoverconf}"
+	touch "${apacheautodiscoverconf}"
 fi
 
 ## Thunderbird autoconfig
@@ -209,17 +225,17 @@ RewriteCond %{REQUEST_URI} !${ioslogo}
 RewriteCond %{REQUEST_URI} ios
 RewriteRule .* /ios/iphone.xml [R]" > "${autodiscoverhtaccess}"
 
-## HTTPD aliases config
+## Apache aliases config
 echo ""
-fn_logecho "[ INFO ] Writing autodiscover httpd configuration file"
+fn_logecho "[ INFO ] Writing autodiscover Apache configuration file"
 sleep 0.5
 echo "Alias /autodiscover \"${autodiscoverpath}\"
 Alias /Autodiscover \"${autodiscoverpath}\"
-Alias /ios \"${iospath}\"" > "${httpdautodiscoverconf}"
+Alias /ios \"${iospath}\"" > "${apacheautodiscoverconf}"
 
 echo ""
-fn_logecho "[ INFO ] Restarting httpd"
-service httpd restart
+fn_logecho "[ INFO ] Restarting Apache"
+service ${apacheservicename} restart
 
 ## Testing
 
