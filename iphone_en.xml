@@ -1,0 +1,34 @@
+<?php if ($_REQUEST['email'] != "" && $_REQUEST['name'] != "" && filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL)): ?>
+		<?php
+			header('Content-Type: text/plain');
+			header("Content-Disposition: attachment; filename=\"".$_REQUEST['email'].".mobileconfig\"");
+			$conf = file_get_contents('iphone.mobileconfig');
+			$conf = str_replace('MAILADDR', $_REQUEST['email'], $conf);
+			$conf = str_replace('NAME', $_REQUEST['name'], $conf);
+			print $conf;
+		?>
+<?php else: ?>
+	<html>
+		<head>
+			<title>iPhone mail auto-configuration</title>
+			<meta name="viewport" content="width=device-width; initial-scale=1; user-scalable=no" />
+  	</head>
+		<body style="font: 100% Verdana;">
+			<form method="post" action="iphone.xml">
+				<p style="text-align: center">
+					<img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
+					<br/><br/>
+					Enter your first and last name (displayed as a sender name for your emails)<br/>
+					and your email address to configure your Apple device.<br/>
+					<br/><br/>
+					First/last name (required): <input type="text" name="name" style="height: 30px; width: 250px;"/><br/>
+					<br/><br/>
+					Mail address (required): <input type="text" name="email" style="height: 30px; width: 250px;"/><br/>
+					<br/><br/>
+					<input type="submit" value="Download"/><br/><br/>
+					Please, fill every fileds and use a valid mail address, otherwise, the download won't start!
+				</p>
+			</form>
+		</body>
+	</html>
+<?php endif ?>
