@@ -27,6 +27,7 @@ nano plesk_mail_autoconfig.sh
 ````
 
 ## Requirements
+- Debian or RedHat based distro should work OK, checks are made for apache config files locations anyways
 - Your Plesk default domain must be set to "None" (default).
 - This script assumes that your machine hostname is the one to connect to for mail, and that it has SSL/TLS certificates (best practice).
 - Your DNS zones shall preferably be managed into Plesk, otherwise, for Thunderbird autoconfig to work, you just need to add the following CNAME to your domain names' DNS zones: autoconfig > [hostname].tld.
@@ -49,6 +50,6 @@ nano plesk_mail_autoconfig.sh
  If you need different settings for emails (ports, protocols, etc.), feel free to fork this, and change the repo (gituser, gitrepo, and gitbranch) to yours.
  
  # Credits
- From the Company HaiSoft https://www.haisoft.fr/
+From the Company HaiSoft https://www.haisoft.fr/
 Benoît Ouacham: https://benoua.fr/
 Robin Labadie: https://www.lrob.fr/
