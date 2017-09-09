@@ -18,7 +18,7 @@
 				<p style="text-align: center">
 					<img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
 					<br/><br/>
-					Enter your first and last name (displayed as a sender name for your emails)<br/>
+					Please, enter your first and last name (displayed as a sender name for your emails)<br/>
 					and your email address to configure your Apple device.<br/>
 					<br/><br/>
 					First/last name (required): <input type="text" name="name" style="height: 30px; width: 250px;"/><br/>
