@@ -4,7 +4,7 @@ Deploys Plesk autoconfig functionnality for:
 
 - Thunderbird autoconfig
 - Outlook autodiscover
-- Apples iOS config generator
+- Apple iOS (config file generator)
 
 ## Usage
 
