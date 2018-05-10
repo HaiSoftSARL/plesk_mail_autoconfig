@@ -14,7 +14,7 @@ docurl="http://help.haisoft.net/"
 hostname="$(hostname)"
 
 # Git repo, useful if you want to fork it
-gituser="UltimateByte"
+gituser="HaiSoftSARL"
 gitrepo="plesk_mail_autoconfig"
 gitbranch="master"
 
