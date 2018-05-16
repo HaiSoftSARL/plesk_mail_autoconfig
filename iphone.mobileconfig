@@ -5,7 +5,7 @@
   <dict>
     <key>PayloadIdentifier</key>
     <string>
-    com.apple.mdm.%hostname%.%first_uuid%.haisoft</string>
+    com.apple.mdm.HOSTNAME.%first_uuid%.COMPANYLOWERCASENAME</string>
     <key>PayloadRemovalDisallowed</key>
     <false />
     <key>PayloadScope</key>
@@ -15,7 +15,7 @@
     <key>PayloadUUID</key>
     <string>%first_uuid%</string>
     <key>PayloadOrganization</key>
-    <string>%hostname%</string>
+    <string>HOSTNAME</string>
     <key>PayloadVersion</key>
     <integer>1</integer>
     <key>PayloadDisplayName</key>
@@ -29,7 +29,7 @@
         <integer>1</integer>
         <key>PayloadIdentifier</key>
         <string>
-        com.apple.mdm.%hostname%.%first_uuid%.haisoft.email.%second_uuid%</string>
+        com.apple.mdm.HOSTNAME.%first_uuid%.COMPANYLOWERCASENAME.email.%second_uuid%</string>
         <key>PayloadUUID</key>
         <string>%second_uuid%</string>
         <key>PayloadEnabled</key>
@@ -65,13 +65,13 @@
         <key>EmailAddress</key>
         <string>%email%</string>
         <key>IncomingMailServerHostName</key>
-        <string>%hostname%</string>
+        <string>HOSTNAME</string>
 	<key>IncomingMailServerPortNumber</key>
 	<integer>993</integer>
         <key>IncomingMailServerUsername</key>
         <string>%email%</string>
         <key>OutgoingMailServerHostName</key>
-        <string>%hostname%</string>
+        <string>HOSTNAME</string>
 	<key>OutgoingMailServerPortNumber</key>
 	<integer>465</integer>
         <key>OutgoingMailServerUsername</key>
