@@ -211,7 +211,6 @@ sed -i -e "s/IOSLOGO/${ioslogo}/g" "${iphonepathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonepathfile}"
 
 sed -i -e "s/HOSTNAME/${hostname}/g" "${iphonemobileconfpathfile}"
-sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonemobileconfpathfile}"
 sed -i -e "s/COMPANYLOWERCASENAME/${companylowercasename}/g" "${iphonemobileconfpathfile}"
 
 ## .htaccess config
