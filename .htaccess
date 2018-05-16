@@ -1,7 +1,0 @@
-AddHandler php-script .php .xml
-
-RewriteEngine on
-RewriteCond %{REQUEST_URI} !iphone.xml
-RewriteCond %{REQUEST_URI} !logoplat.png
-RewriteCond %{REQUEST_URI} ios
-RewriteRule .* /ios/iphone.xml [R]
