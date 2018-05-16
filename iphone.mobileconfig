@@ -1,77 +1,86 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+   "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>HasRemovalPasscode</key>
-	<false/>
-	<key>PayloadContent</key>
-	<array>
-		<dict>
-			<key>EmailAccountDescription</key>
-			<string>MAILADDR</string>
-			<key>EmailAccountName</key>
-			<string>NAME</string>
-			<key>EmailAccountType</key>
-			<string>EmailTypeIMAP</string>
-			<key>EmailAddress</key>
-			<string>MAILADDR</string>
-			<key>IncomingMailServerAuthentication</key>
-			<string>EmailAuthPassword</string>
-			<key>IncomingMailServerHostName</key>
-			<string>HOSTNAME</string>
-			<key>IncomingMailServerPortNumber</key>
-			<integer>993</integer>
-			<key>IncomingMailServerUseSSL</key>
-			<true/>
-			<key>IncomingMailServerUsername</key>
-			<string>MAILADDR</string>
-			<key>OutgoingMailServerAuthentication</key>
-			<string>EmailAuthPassword</string>
-			<key>OutgoingMailServerHostName</key>
-			<string>HOSTNAME</string>
-			<key>OutgoingMailServerPortNumber</key>
-			<integer>465</integer>
-			<key>OutgoingMailServerUseSSL</key>
-			<true/>
-			<key>OutgoingMailServerUsername</key>
-			<string>MAILADDR</string>
-			<key>OutgoingPasswordSameAsIncomingPassword</key>
-			<true/>
-			<key>PayloadDescription</key>
-			<string>Configuration automatique de votre compte de messagerie</string>
-			<key>PayloadDisplayName</key>
-			<string>MAILADDR</string>
-			<key>PayloadIdentifier</key>
-			<string>COMPANYLOWERCASENAME.autodiscover.com.apple.mail.managed.7A981A9E-D5D0-4EF8-87FE-39FD6A506FAC</string>
-			<key>PayloadType</key>
-			<string>com.apple.mail.managed</string>
-			<key>PayloadUUID</key>
-			<string>7A981A9E-D5D0-4EF8-87FE-39FD6A506FAC</string>
-			<key>PayloadVersion</key>
-			<real>1</real>
-			<key>SMIMEEnablePerMessageSwitch</key>
-			<false/>
-			<key>SMIMEEnabled</key>
-			<false/>
-			<key>disableMailRecentsSyncing</key>
-			<false/>
-		</dict>
-	</array>
-	<key>PayloadDescription</key>
-	<string>Configure Email Settings</string>
-	<key>PayloadDisplayName</key>
-	<string>MAILADDR</string>
-	<key>PayloadIdentifier</key>
-	<string>COMPANYLOWERCASENAME.autodiscover</string>
-	<key>PayloadOrganization</key>
-	<string>COMPANYNAME</string>
-	<key>PayloadRemovalDisallowed</key>
-	<false/>
-	<key>PayloadType</key>
-	<string>Configuration</string>
-	<key>PayloadUUID</key>
-	<string>48C88203-4DB9-49E8-B593-4831903605A0</string>
-	<key>PayloadVersion</key>
-	<integer>1</integer>
-</dict>
+  <dict>
+    <key>PayloadIdentifier</key>
+    <string>
+    com.apple.mdm.%hostname%.%first_uuid%.haisoft</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false />
+    <key>PayloadScope</key>
+    <string>User</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>%first_uuid%</string>
+    <key>PayloadOrganization</key>
+    <string>%hostname%</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+    <key>PayloadDisplayName</key>
+    <string>%email%</string>
+    <key>PayloadContent</key>
+    <array>
+      <dict>
+        <key>PayloadType</key>
+        <string>com.apple.mail.managed</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>PayloadIdentifier</key>
+        <string>
+        com.apple.mdm.%hostname%.%first_uuid%.haisoft.email.%second_uuid%</string>
+        <key>PayloadUUID</key>
+        <string>%second_uuid%</string>
+        <key>PayloadEnabled</key>
+        <true />
+        <key>PayloadDisplayName</key>
+        <string>%email%</string>
+        <key>EmailAccountDescription</key>
+        <string>%email%</string>
+        <key>disableMailRecentsSyncing</key>
+        <true />
+        <key>allowMailDrop</key>
+        <false />
+        <key>PreventMove</key>
+        <true />
+        <key>PreventAppSheet</key>
+        <false />
+        <key>SMIMEEnabled</key>
+        <false />
+        <key>SMIMEEnablePerMessageSwitch</key>
+        <false />
+        <key>IncomingMailServerAuthentication</key>
+        <string>EmailAuthPassword</string>
+        <key>IncomingMailServerUseSSL</key>
+        <true />
+        <key>OutgoingMailServerAuthentication</key>
+        <string>EmailAuthPassword</string>
+        <key>OutgoingMailServerUseSSL</key>
+        <true />
+        <key>EmailAccountType</key>
+        <string>EmailTypeIMAP</string>
+        <key>EmailAccountName</key>
+        <string>%full_name%</string>
+        <key>EmailAddress</key>
+        <string>%email%</string>
+        <key>IncomingMailServerHostName</key>
+        <string>%hostname%</string>
+	<key>IncomingMailServerPortNumber</key>
+	<integer>993</integer>
+        <key>IncomingMailServerUsername</key>
+        <string>%email%</string>
+        <key>OutgoingMailServerHostName</key>
+        <string>%hostname%</string>
+	<key>OutgoingMailServerPortNumber</key>
+	<integer>465</integer>
+        <key>OutgoingMailServerUsername</key>
+        <string>%email%</string>
+        <key>OutgoingPasswordSameAsIncomingPassword</key>
+        <true />
+        <key>updated_at_xid</key>
+        <integer>4470</integer>
+      </dict>
+    </array>
+  </dict>
 </plist>
