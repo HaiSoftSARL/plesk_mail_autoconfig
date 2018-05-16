@@ -1,12 +1,28 @@
-<?php if ($_REQUEST['email'] != "" && $_REQUEST['name'] != "" && filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL)): ?>
-		<?php
-			header('Content-Type: text/plain');
-			header("Content-Disposition: attachment; filename=\"".$_REQUEST['email'].".mobileconfig\"");
-			$conf = file_get_contents('iphone.mobileconfig');
-			$conf = str_replace('MAILADDR', $_REQUEST['email'], $conf);
-			$conf = str_replace('NAME', $_REQUEST['name'], $conf);
-			print $conf;
-		?>
+<?php if ($_REQUEST['email'] != "" && $_REQUEST['nom'] != "" && filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL)): ?>
+  <?php
+  header('Content-Type: text/plain');
+  header("Content-Disposition: attachment; filename=\"".$_REQUEST['email'].".mobileconfig\"");
+  $conf = file_get_contents('iphone.mobileconfig');
+  $conf = str_replace('%email%', $_REQUEST['email'], $conf);
+  $conf = str_replace('%full_name%', $_REQUEST['nom'], $conf);
+  function guidv4()
+  {
+      if (function_exists('com_create_guid') === true)
+          return trim(com_create_guid(), '{}');
+
+      $data = openssl_random_pseudo_bytes(16);
+      $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
+      $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
+      return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+  }
+  $firstid = guidv4();
+  $secondid = guidv4();
+  $conf = str_replace('%first_uuid%', $firstid, $conf);
+  $conf = str_replace('%second_uuid%', $secondid, $conf);
+  $host_name = gethostname();
+  $conf = str_replace('%hostname%', $host_name, $conf);
+  print $conf;
+  ?>
 <?php else: ?>
 	<html>
 		<head>
