@@ -23,6 +23,7 @@
   $conf = str_replace('%hostname%', $host_name, $conf);
   print $conf;
   ?>
+<?php else: ?>
   <html>
   <head>
     <title>Auto-configuration mail pour iPhone</title>
