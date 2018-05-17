@@ -1,6 +1,6 @@
 <?php if ($_REQUEST['email'] != "" && $_REQUEST['nom'] != "" && filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL)): ?>
   <?php
-  header('Content-Type: text/plain');
+  header('Content-Type: application/x-apple-aspen-config');
   header("Content-Disposition: attachment; filename=\"".$_REQUEST['email'].".mobileconfig\"");
   $conf = file_get_contents('iphone.mobileconfig');
   $conf = str_replace('%email%', $_REQUEST['email'], $conf);
