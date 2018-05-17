@@ -4,7 +4,7 @@ This script for Plesk servers allows you to deploy automatic mail client configu
 
 - Thunderbird autoconfig
 - Outlook autodiscover
-- Apple iOS (config file generator)
+- Apple iOS 4 or later and Mac OS X 10.8 or later (config file generator)
 
 # How to use
 
