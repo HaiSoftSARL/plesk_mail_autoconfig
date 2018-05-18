@@ -32,7 +32,7 @@
   <body style="font: 100% Verdana;">
     <form method="post" action="apple.xml">
       <p style="text-align: center">
-        <img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
+        <img src="APPLELOGO" alt="COMPANYNAME logo"/><br/>
         <br/><br/>
         Entrez vos nom et pr&eacute;nom (qui s'afficheront en tant qu'exp&eacute;diteur des e-mails)<br/>
         et votre adresse email compl&egrave;te, afin d'obtenir un fichier de configuration pour votre appareil Apple<br/>
