@@ -32,7 +32,7 @@
 		<body style="font: 100% Verdana;">
 			<form method="post" action="apple.xml">
 				<p style="text-align: center">
-					<img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
+					<img src="APPLELOGO" alt="COMPANYNAME logo"/><br/>
 					<br/><br/>
 					Please, enter your first and last name (displayed as a sender name for your emails)<br/>
 					and your email address to configure your Apple device<br/>
