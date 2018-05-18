@@ -2,7 +2,7 @@
   <?php
   header('Content-Type: application/x-apple-aspen-config');
   header("Content-Disposition: attachment; filename=\"".$_REQUEST['email'].".mobileconfig\"");
-  $conf = file_get_contents('iphone.mobileconfig');
+  $conf = file_get_contents('apple.mobileconfig');
   $conf = str_replace('%email%', $_REQUEST['email'], $conf);
   $conf = str_replace('%full_name%', $_REQUEST['nom'], $conf);
   function guidv4()
