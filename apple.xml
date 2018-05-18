@@ -26,11 +26,11 @@
 <?php else: ?>
   <html>
   <head>
-    <title>Auto-configuration mail pour iPhone</title>
+    <title>Auto-configuration mail pour Apple</title>
     <meta name="viewport" content="width=device-width; initial-scale=1; user-scalable=no" />
   </head>
   <body style="font: 100% Verdana;">
-    <form method="post" action="iphone.xml">
+    <form method="post" action="apple.xml">
       <p style="text-align: center">
         <img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
         <br/><br/>
