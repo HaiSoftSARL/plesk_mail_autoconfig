@@ -35,8 +35,8 @@
         <img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
         <br/><br/>
         Entrez vos nom et pr&eacute;nom (qui s'afficheront en tant qu'exp&eacute;diteur des e-mails)<br/>
-        et votre adresse email compl&egrave;te, afin d'obtenir un fichier de configuration
-        pour votre appareil iOS (iPhone/iPad...)<br/>
+        et votre adresse email compl&egrave;te, afin d'obtenir un fichier de configuration pour votre appareil Apple<br/>
+        (iPhone/iPad sous iOS 4 ou plus - Mac sous OS X 10.8 ou plus)<br/>
         <br/><br/>
         Pr&eacute;nom et nom (requis) : <input type="text" name="nom" style="height: 30px; width: 250px;"/><br/>
         <br/><br/>
