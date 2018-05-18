@@ -24,28 +24,28 @@
   print $conf;
   ?>
 <?php else: ?>
-	<html>
-		<head>
-			<title>Apple mail auto-configuration</title>
-			<meta name="viewport" content="width=device-width; initial-scale=1; user-scalable=no" />
-  	</head>
-		<body style="font: 100% Verdana;">
-			<form method="post" action="apple.xml">
-				<p style="text-align: center">
-					<img src="APPLELOGO" alt="COMPANYNAME logo"/><br/>
-					<br/><br/>
-					Please, enter your first and last name (displayed as a sender name for your emails)<br/>
-					and your email address to configure your Apple device<br/>
-					(iPhone/iPad under iOS 4 or more - Mac under OS X 10.8 or more)<br/>
-					<br/><br/>
-					First/last name (required): <input type="text" name="name" style="height: 30px; width: 250px;"/><br/>
-					<br/><br/>
-					Mail address (required): <input type="text" name="email" style="height: 30px; width: 250px;"/><br/>
-					<br/><br/>
-					<input type="submit" value="Download"/><br/><br/>
-					Please, fill every fileds and use a valid mail address, otherwise, the download won't start!
-				</p>
-			</form>
-		</body>
-	</html>
+  <html>
+  <head>
+    <title>Apple mail auto-configuration</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1; user-scalable=no" />
+  </head>
+  <body style="font: 100% Verdana;">
+    <form method="post" action="apple.xml">
+      <p style="text-align: center">
+        <img src="logo.png" alt="HaiSoft logo"/><br/>
+        <br/><br/>
+        Please, enter your first and last name (displayed as a sender name for your emails)<br/>
+        and your email address to configure your Apple device<br/>
+        (iPhone/iPad under iOS 4 or more - Mac under OS X 10.8 or more)<br/>
+        <br/><br/>
+        First/last name (required): <input type="text" name="nom" style="height: 30px; width: 250px;"/><br/>
+        <br/><br/>
+        Email address (required): <input type="text" name="email" style="height: 30px; width: 250px;"/><br/>
+        <br/><br/>
+        <input type="submit" value="T&eacute;l&eacute;charger"/><br/><br/>
+        Please, fill every field and use a valid mail address, otherwise, the download won't start!
+      </p>
+    </form>
+  </body>
+</html>
 <?php endif ?>
