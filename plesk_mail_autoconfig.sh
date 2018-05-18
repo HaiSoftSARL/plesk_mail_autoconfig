@@ -1,6 +1,6 @@
 #!/bin/bash
 # Deploy mail autoconfig for Plesk
-# Support for Thunderbird autoconfig, Outlook autodiscover & iOS config generator
+# Support for Thunderbird autoconfig, Outlook autodiscover & Apple config generator
 # Website: haisoft.net
 
 ## Settings
@@ -12,6 +12,7 @@ companylowercasename="haisoft"
 companyurl="haisoft.net"
 docurl="http://help.haisoft.net/"
 hostname="$(hostname)"
+applewebpagelanguage="fr"
 
 # Git repo, useful if you want to fork it
 gituser="HaiSoftSARL"
@@ -33,18 +34,18 @@ autodiscoverpathfile="${autodiscoverpath}/autodiscover.xml"
 autodiscoverpathfilealt="${autodiscoverpath}/Autodiscover.xml"
 autodiscoverhtaccess="${autodiscoverpath}/.htaccess"
 
-# iOS configurator paths
-iospath="${defaulthostingdir}/mail"
-iphonepathfile="${iospath}/iphone.xml"
-iphonemobileconfpathfile="${autodiscoverpath}/iphone.mobileconfig"
-ioslogo="logo.png"
-ioslogourl="https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/${ioslogo}"
+# Apple configurator paths
+applepath="${defaulthostingdir}/mail"
+applewebpagepath="${applepath}/apple.xml"
+applemobileconfpathfile="${autodiscoverpath}/apple.mobileconfig"
+appleweblogo="logo.png"
+appleweblogourl="https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/${appleweblogo}"
 
 # URLs used for tests
 autoconfigurl="http://autoconfig.${hostname}/mail/config-v1.1.xml"
 autodiscoverurl="https://${hostname}/autodiscover/autodiscover.xml"
 autodiscoverurlalt="https://${hostname}/Autodiscover/Autodiscover.xml"
-iosconfigurl="http://${hostname}/ios"
+appleconfigurl="http://${hostname}/apple"
 
 ##############
 ### Script ###
@@ -115,37 +116,37 @@ if [ ! -f "${autodiscoverpathfile}" ]; then
 fi
 
 if [ ! -L "${autodiscoverpathfilealt}" ]; then
-	fn_logecho "[INFO] Symlinking autodiscover alternative config file"
+	fn_logecho "[ ... ] Symlinking autodiscover alternative config file"
 	fn_logecho "${autodiscoverpathfile} -> ${autodiscoverpathfilealt}"
 	ln -s "${autodiscoverpathfile}" "${autodiscoverpathfilealt}"
 fi
 
-if [ ! -d "${iospath}" ]; then
-	fn_logecho "[ ... ] Creating iOS mail configurator directory"
-	fn_logecho "${iospath}"
-	mkdir -p "${iospath}"
+if [ ! -d "${applepath}" ]; then
+	fn_logecho "[ INFO ] Creating Apple mail configurator directory"
+	fn_logecho "${applepath}"
+	mkdir -p "${applepath}"
 fi
 
-if [ ! -f "${iphonepathfile}" ]; then
-	fn_logecho "[ ... ] Creating iOS config file"
-	fn_logecho "${iphonepathfile}"
-	touch "${iphonepathfile}"
+if [ ! -f "${applewebpagepath}" ]; then
+	fn_logecho "[INFO] Creating Apple web page"
+	fn_logecho "${applewebpagepath}"
+	touch "${applewebpagepath}"
 fi
 
-if [ ! -f "${iphonemobileconfpathfile}" ]; then
-	fn_logecho "[INFO] Creating iOS mobile config file"
-	fn_logecho "${iphonemobileconfpathfile}"
-	touch "${iphonemobileconfpathfile}"
+if [ ! -f "${applemobileconfpathfile}" ]; then
+	fn_logecho "[ INFO ] Creating Apple mobileconfig file"
+	fn_logecho "${applemobileconfpathfile}"
+	touch "${applemobileconfpathfile}"
 fi
 
 if [ ! -f "${autodiscoverhtaccess}" ]; then
-	fn_logecho "[INFO] Creating autodiscover .htaccess file"
+	fn_logecho "[ INFO ] Creating autodiscover .htaccess file"
 	fn_logecho "${autodiscoverhtaccess}"
 	touch "${autodiscoverhtaccess}"
 fi
 
 if [ ! -f "${apacheautodiscoverconf}" ]; then
-	fn_logecho "[INFO] Creating autodiscover Apache configuration file"
+	fn_logecho "[ INFO ] Creating autodiscover Apache configuration file"
 	fn_logecho "${apacheautodiscoverconf}"
 	touch "${apacheautodiscoverconf}"
 fi
@@ -192,26 +193,30 @@ sleep 0.5
 sed -i -e "s/HOSTNAME/${hostname}/g" "${autodiscoverpathfile}"
 sed -i -e "s/COMPANYNAME/${companyname}/g" "${autodiscoverpathfile}"
 
-## iOS config
+## Apple config
 echo ""
-fn_logecho "[ INFO ] Writing iOS config files"
+fn_logecho "[ INFO ] Writing Apple config files"
 echo ""
 sleep 0.5
-curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.xml" > "${iphonepathfile}"
-curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/iphone.mobileconfig" > "${iphonemobileconfpathfile}"
+if [ ${applewebpagelanguage} = fr ]; then
+	curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/apple_fr.xml" > "${applewebpagepath}"
+elif [ ${applewebpagelanguage} = en ]; then
+	curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/apple_en.xml" > "${applewebpagepath}"
+fi
+curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/apple.mobileconfig" > "${applemobileconfpathfile}"
 
-# iOS Logo
-fn_logecho "[ ... ] Downloading ${ioslogo} logo for iOS"
+# Apple web page Logo
+fn_logecho "[ ... ] Downloading ${appleweblogo} logo for Apple web page"
 sleep 0.5
-wget -O "${iospath}/${ioslogo}" "${ioslogourl}"
-# iOS Settings
-fn_logecho "[ ... ] Populating iOS config files"
+wget -O "${applepath}/${appleweblogo}" "${appleweblogourl}"
+# Apple Settings
+fn_logecho "[ ... ] Populating Apple config files"
 sleep 0.5
-sed -i -e "s/IOSLOGO/${ioslogo}/g" "${iphonepathfile}"
-sed -i -e "s/COMPANYNAME/${companyname}/g" "${iphonepathfile}"
+sed -i -e "s/APPLELOGO/${appleweblogo}/g" "${applewebpagepath}"
+sed -i -e "s/COMPANYNAME/${companyname}/g" "${applewebpagepath}"
 
-sed -i -e "s/HOSTNAME/${hostname}/g" "${iphonemobileconfpathfile}"
-sed -i -e "s/COMPANYLOWERCASENAME/${companylowercasename}/g" "${iphonemobileconfpathfile}"
+sed -i -e "s/HOSTNAME/${hostname}/g" "${applemobileconfpathfile}"
+sed -i -e "s/COMPANYLOWERCASENAME/${companylowercasename}/g" "${applemobileconfpathfile}"
 
 ## .htaccess config
 echo ""
@@ -219,10 +224,10 @@ fn_logecho "[ INFO ] Writing htaccess file"
 sleep 0.5
 echo "AddHandler php-script .php .xml
 RewriteEngine on
-RewriteCond %{REQUEST_URI} !iphone.xml
-RewriteCond %{REQUEST_URI} !${ioslogo}
-RewriteCond %{REQUEST_URI} ios
-RewriteRule .* /ios/iphone.xml [R]" > "${autodiscoverhtaccess}"
+RewriteCond %{REQUEST_URI} !apple.xml
+RewriteCond %{REQUEST_URI} !${appleweblogo}
+RewriteCond %{REQUEST_URI} apple
+RewriteRule .* /apple/apple.xml [R]" > "${autodiscoverhtaccess}"
 
 ## Apache aliases config
 echo ""
@@ -230,7 +235,7 @@ fn_logecho "[ INFO ] Writing autodiscover Apache configuration file"
 sleep 0.5
 echo "Alias /autodiscover \"${autodiscoverpath}\"
 Alias /Autodiscover \"${autodiscoverpath}\"
-Alias /ios \"${iospath}\"" > "${apacheautodiscoverconf}"
+Alias /apple \"${applepath}\"" > "${apacheautodiscoverconf}"
 
 echo ""
 fn_logecho "[ INFO ] Restarting Apache"
@@ -268,11 +273,11 @@ else
 fi
 echo ""
 sleep 0.5
-# Test Apple iOS configurator
-if [ -n "$(curl -L "${iosconfigurl}" | grep "<form method=\"post\" action=\"iphone.xml\">")" ]; then
-	fn_logecho "[ OK ] iOS ${iosconfigurl} is accessible"
+# Test Apple configurator
+if [ -n "$(curl -L "${appleconfigurl}" | grep "<form method=\"post\" action=\"iphone.xml\">")" ]; then
+	fn_logecho "[ OK ] Apple ${appleconfigurl} is accessible"
 else
-	fn_logecho "[ Warning ] iOS ${iosconfigurl} does not seem to be accessible"
+	fn_logecho "[ Warning ] Apple ${appleconfigurl} does not seem to be accessible"
 fi
 
 fn_logecho "[ OK ] Done"
