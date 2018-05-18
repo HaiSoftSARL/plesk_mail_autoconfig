@@ -35,7 +35,8 @@
 					<img src="IOSLOGO" alt="COMPANYNAME logo"/><br/>
 					<br/><br/>
 					Please, enter your first and last name (displayed as a sender name for your emails)<br/>
-					and your email address to configure your Apple device.<br/>
+					and your email address to configure your Apple device<br/>
+					(iPhone/iPad under iOS 4 or more - Mac under OS X 10.8 or more)<br/>
 					<br/><br/>
 					First/last name (required): <input type="text" name="name" style="height: 30px; width: 250px;"/><br/>
 					<br/><br/>
