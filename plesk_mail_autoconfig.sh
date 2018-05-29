@@ -261,7 +261,7 @@ sleep 0.5
 if [ -n "$(curl "${autodiscoverurl}" | grep "<DisplayName>${companyname}</DisplayName>")" ]; then
 	fn_logecho "[ OK ] Outlook ${autodiscoverurl} is accessible"
 else
-	fn_logecho "[ Warning ] Outlook ${autodiscoverurl} does not seem to be accessible"
+	fn_logecho "[ Warning ] Outlook ${autodiscoverurl} does not seem to be accessible (or certificate is not valid)"
 fi
 echo ""
 sleep 0.5
@@ -269,7 +269,7 @@ sleep 0.5
 if [ -n "$(curl "${autodiscoverurlalt}" | grep "<DisplayName>${companyname}</DisplayName>")" ]; then
 	fn_logecho "[ OK ] Outlook ${autodiscoverurlalt} is accessible"
 else
-	fn_logecho "[ Warning ] Outlook ${autodiscoverurlalt} does not seem to be accessible"
+	fn_logecho "[ Warning ] Outlook ${autodiscoverurlalt} does not seem to be accessible (or certificate is not valid)"
 fi
 echo ""
 sleep 0.5
