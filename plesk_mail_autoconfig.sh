@@ -274,7 +274,7 @@ fi
 echo ""
 sleep 0.5
 # Test Apple configurator
-if [ -n "$(curl -L "${appleconfigurl}" | grep "<form method=\"post\" action=\"iphone.xml\">")" ]; then
+if [ -n "$(curl -L "${appleconfigurl}" | grep "<form method=\"post\" action=\"apple.xml\">")" ]; then
 	fn_logecho "[ OK ] Apple ${appleconfigurl} is accessible"
 else
 	fn_logecho "[ Warning ] Apple ${appleconfigurl} does not seem to be accessible"
