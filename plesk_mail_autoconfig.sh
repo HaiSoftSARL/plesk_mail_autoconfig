@@ -202,6 +202,9 @@ if [ ${applewebpagelanguage} = fr ]; then
 	curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/apple_fr.xml" > "${applewebpagepath}"
 elif [ ${applewebpagelanguage} = en ]; then
 	curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/apple_en.xml" > "${applewebpagepath}"
+else
+        fn_logecho "[ Warning ] Selected language ${applewebpagelanguage} is not available. Reverting to english."
+        curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/apple_en.xml" > "${applewebpagepath}"
 fi
 curl "https://raw.githubusercontent.com/${gituser}/${gitrepo}/${gitbranch}/apple.mobileconfig" > "${applemobileconfpathfile}"
 
