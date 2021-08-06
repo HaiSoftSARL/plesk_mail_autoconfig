@@ -1,4 +1,4 @@
-OUTDATED PROJECT / PROJET OBSOLÈTE\
+**OUTDATED PROJECT / PROJET OBSOLÈTE**\
 As Plesk now supports autodiscover since Plesk Obsidian, this project will no longer be maintained.\
 Plesk supportant l'autodiscover depuis Plesk Obsidian, ce projet ne sera plus maintenu.
 
